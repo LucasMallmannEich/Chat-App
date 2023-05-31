@@ -8,7 +8,10 @@ import json
 def index(request):
     user = request.user.profile
     friends = user.friends.all()
-    context = {'user': user, 'friends': friends}
+    last_msg = []
+    for friend in friends:  # for each friends in my friends list
+        last_msg.append(ChatMessage.objects.filter(msg_sender__id=friend.profile.id, msg_receiver=user).last())
+    context = {'user': user, 'friends': friends, 'last_msg': last_msg}
     return render(request, 'mychatapp/index.html', context)
 
 
